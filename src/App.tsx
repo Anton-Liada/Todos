@@ -70,7 +70,9 @@ export const App: React.FC = () => {
 
   useEffect(() => {
     newTodoField.current?.focus();
+  }, [title]);
 
+  useEffect(() => {
     const fetchData = async () => {
       const todosFromServer = await getTodos(user?.id || 0);
 
@@ -83,10 +85,6 @@ export const App: React.FC = () => {
       setIsError(true);
       setErrorMessage(ErrorMessage.LOADING);
     }
-  }, []);
-
-  useEffect(() => {
-    newTodoField.current?.focus();
   }, [todos]);
 
   const handleRemove = useCallback(async (todoId: number) => {

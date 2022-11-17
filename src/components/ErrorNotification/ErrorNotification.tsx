@@ -1,5 +1,5 @@
 import classNames from 'classnames';
-import { useEffect } from 'react';
+import React, { useEffect } from 'react';
 import { ErrorMessage } from '../../types/Enums';
 
 type Props = {

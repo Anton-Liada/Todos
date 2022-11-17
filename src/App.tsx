@@ -16,7 +16,6 @@ import {
 export const App: React.FC = () => {
   const user = useContext(AuthContext);
   const newTodoField = useRef<HTMLInputElement>(null);
-
   const [todos, setTodos] = useState<Todo[]>([]);
   const [filterType, setFilterType] = useState(FilterStatus.All);
   const [errorMessage, setErrorMessage] = useState<ErrorMessage | null>(null);
@@ -70,9 +69,7 @@ export const App: React.FC = () => {
   }, [title]);
 
   useEffect(() => {
-    if (newTodoField.current) {
-      newTodoField.current.focus();
-    }
+    newTodoField.current?.focus();
 
     const fetchData = async () => {
       const todosFromServer = await getTodos(user?.id || 0);
@@ -92,36 +89,19 @@ export const App: React.FC = () => {
     newTodoField.current?.focus();
   }, [todos]);
 
-  const loadTodos = useCallback(async () => {
-    try {
-      setTodos(await getTodos(user?.id || 0));
-    } catch {
-      setIsError(true);
-      setErrorMessage(ErrorMessage.LOADING);
-    }
-  }, [todos]);
-
-  useEffect(() => {
-    if (newTodoField.current) {
-      newTodoField.current.focus();
-    }
-
-    loadTodos();
-  }, []);
-
   const handleRemove = useCallback(async (todoId: number) => {
     setSelectedTodos(state => [...state, todoId]);
 
     try {
       await deleteTodo(todoId);
-
-      setTodos(todos.filter(({ id }) => id !== todoId));
     } catch {
       setIsError(true);
       setErrorMessage(ErrorMessage.DELETING);
     } finally {
       setSelectedTodos([]);
     }
+
+    setTodos(todos.filter(({ id }) => id !== todoId));
   }, [todos]);
 
   const completedTodos = useMemo(() => {
@@ -175,7 +155,7 @@ export const App: React.FC = () => {
           : todo
       )));
 
-      setTodos(newTodos);
+      setTodos(prev => [...prev, ...newTodos]);
     } catch {
       setIsError(true);
       setErrorMessage(ErrorMessage.UPDATING);

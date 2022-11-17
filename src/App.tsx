@@ -119,7 +119,7 @@ export const App: React.FC = () => {
       setErrorMessage(ErrorMessage.DELETING);
       setSelectedTodos([]);
     }
-  }, [completedTodos]);
+  }, [todos]);
 
   const handleTodoUpdate = useCallback(async (
     todoId: number,
